@@ -1,35 +1,41 @@
 package post
 
 import (
-	"net/http"
+	"errors"
 	"strconv"
 
 	"github.com/cacastel/go-jsonplaceholder-middle-end/client"
-	"github.com/gin-gonic/gin"
 )
 
 var jsonPlaceholderClient = client.NewJsonPlaceholderClient()
 
-func GetAllPosts(c *gin.Context) {
+var errLimit = errors.New("limit out of bounds")
+
+func GetAllPosts(limit string) ([]*client.JsonPlaceholderPost, error) {
 	posts, err := jsonPlaceholderClient.GetAllPosts()
 
 	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
-		return
+		// c.AbortWithStatus(http.StatusInternalServerError)
+		return nil, err
 	}
 
-	limit := c.Query("limit")
+	// limit := c.Query("limit")
 
 	if len(limit) != 0 {
 		iLimit, err := strconv.Atoi(limit)
 
-		if err != nil || iLimit <= 0 {
-			c.AbortWithStatus(http.StatusBadRequest)
-			return
+		if err != nil {
+			return nil, err
+			// c.AbortWithStatus(http.StatusBadRequest)
+		}
+
+		if iLimit <= 0 {
+			return nil, errLimit
 		}
 
 		posts = posts[:iLimit]
 	}
 
-	c.JSON(http.StatusOK, gin.H{"posts": posts})
+	// c.JSON(http.StatusOK, gin.H{"posts": posts})
+	return posts, nil
 }
