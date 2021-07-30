@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/cacastel/go-jsonplaceholder-middle-end/handler"
+	"github.com/cacastel/go-jsonplaceholder-middle-end/api/post/infrastructure"
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,9 +19,9 @@ func getServerPort() string {
 }
 
 func setupApiRoutes(r *gin.Engine) {
-	group := r.Group("/api")
+	rootGroup := r.Group("/api")
 
-	group.GET("/posts", handler.GetAllPostsHandler)
+	infrastructure.SetupPostRoutes(rootGroup)
 }
 
 func setupNoRoute(r *gin.Engine) {
