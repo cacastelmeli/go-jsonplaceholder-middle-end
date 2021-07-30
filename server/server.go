@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/cacastel/go-jsonplaceholder-middle-end/api/post/infrastructure"
+	infraUser "github.com/cacastel/go-jsonplaceholder-middle-end/api/user/infrastructure"
 	"github.com/gin-gonic/gin"
 )
 
@@ -22,6 +23,7 @@ func setupApiRoutes(r *gin.Engine) {
 	rootGroup := r.Group("/api")
 
 	infrastructure.SetupPostRoutes(rootGroup)
+	infraUser.SetupUserRoutes(rootGroup)
 }
 
 func setupNoRoute(r *gin.Engine) {
