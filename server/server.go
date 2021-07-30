@@ -30,11 +30,16 @@ func setupNoRoute(r *gin.Engine) {
 	})
 }
 
-func StartGinServer() {
+func setupRouter() *gin.Engine {
 	router := gin.Default()
 
 	setupApiRoutes(router)
 	setupNoRoute(router)
 
+	return router
+}
+
+func StartGinServer() {
+	router := setupRouter()
 	router.Run(":" + getServerPort())
 }
